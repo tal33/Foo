@@ -59,7 +59,6 @@ namespace Foo.Universal
 #endif
 
             Frame rootFrame = Window.Current.Content as Frame;
-            MvxSuspensionManager suspensionManager = null;    // if not null MvxSetup already called
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -76,8 +75,10 @@ namespace Foo.Universal
                     // Restore the saved session state only when appropriate
                     try
                     {
-                        //Associate the frame with a SuspensionManager key                       
-                        suspensionManager = DoMvxSetup(rootFrame);  // Setup needed here in order to have suspension manager and restoring
+                        Setup.DoSetup(rootFrame);  // Setup needed here in order to have suspension manager associated with rootFrame
+
+                        var suspensionManager = Mvx.GetSingleton<IMvxSuspensionManager>() as MvxSuspensionManager;
+                        Debug.Assert(suspensionManager != null, "suspensionManager must exist if we want to support restoring");
                         await suspensionManager.RestoreAsync();
                     }
                     catch (MvxSuspensionManagerException)
@@ -111,8 +112,8 @@ namespace Foo.Universal
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (suspensionManager == null)  // setup not yet called - typical case unless we are restoring
-                    suspensionManager = DoMvxSetup(rootFrame);
+                if (!Setup.SetupDone)  // setup not yet called - typical case unless we are restoring
+                    Setup.DoSetup(rootFrame);
 
                 var start = Cirrious.CrossCore.Mvx.Resolve<Cirrious.MvvmCross.ViewModels.IMvxAppStart>();
                 start.Start();
@@ -120,17 +121,6 @@ namespace Foo.Universal
 
             // Ensure the current window is active
             Window.Current.Activate();
-        }
-
-        private static MvxSuspensionManager DoMvxSetup(Frame rootFrame)
-        {
-            var setup = new Setup(rootFrame);
-            setup.Initialize();
-
-            var suspensionManager = Mvx.GetSingleton<IMvxSuspensionManager>() as MvxSuspensionManager;
-            //Debug.Assert(suspensionManager != null, "suspensionManager != null");
-            //suspensionManager.RegisterFrame(setup.RootFrame, "AppFrame"); // TODO: SAME CODE IN MvxWindowsSetup but stored as private
-            return suspensionManager;
         }
 
 #if WINDOWS_PHONE_APP
