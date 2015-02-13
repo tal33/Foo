@@ -7,8 +7,17 @@ namespace Foo.Universal
 {
     public class Setup : MvxWindowsSetup
     {
-        public Setup(Frame rootFrame)
-            : base(rootFrame, "AppFrame")
+        public static bool SetupDone { get; private set; }
+
+        public static void DoSetup(Frame rootFrame)
+        {
+            var setup = new Setup(rootFrame);
+            setup.Initialize();
+            SetupDone = true;
+        }
+
+        private Setup(Frame rootFrame)
+            : base(rootFrame, "AppFrame")   // ONLY when providing a suspensionManagerStateKey the suspension manager is properly intialised for handling suspend/resume
         {
         }
 
@@ -21,10 +30,5 @@ namespace Foo.Universal
         {
             return new DebugTrace();
         }
-
-    //    protected override IMvxSuspensionManager CreateSuspensionManager()
-    //    {
-    //        return new TlSuspensionManager();
-    //    }
     }
 }
