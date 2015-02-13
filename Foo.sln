@@ -15,6 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foo.Universal.WindowsPhone"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foo.Wpf", "Foo.Wpf\Foo.Wpf.csproj", "{D66F76A1-EEE3-4296-8E2C-38A487D8941A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{866A99DE-63A1-4997-BD74-213B07E5ED64}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Foo.Universal\Foo.Universal.Shared\Foo.Universal.Shared.projitems*{1c09696d-aacd-418f-80f9-24b9a1d7bc76}*SharedItemsImports = 13
